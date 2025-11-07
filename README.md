@@ -47,37 +47,6 @@ mysql -u huparfum -p huparfum_db < ../database/schema.sql
 
 ---
 
-## Project Structure
-
-```
-HuParfum/
-├── backend/
-│   ├── src/
-│   │   ├── config/database.js
-│   │   ├── models/        (User, Product, Order, Admin)
-│   │   ├── controllers/   (auth, orders, admin)
-│   │   ├── routes/        (auth, orders, admin, telegram)
-│   │   ├── middlewares/   (auth, rateLimiter)
-│   │   ├── notifications/ (emailService, telegramUserBot, telegramOpsBot)
-│   │   ├── utils/         (encryption, jwt)
-│   │   └── server.js
-│   ├── package.json
-│   └── .env.example
-│
-├── frontend/
-│   ├── src/
-│   │   ├── pages/    (Home, Products, Cart, Login, Register, MyOrders, AdminDashboard)
-│   │   ├── App.js
-│   │   ├── App.css
-│   │   └── config.js
-│   └── package.json
-│
-└── database/
-    ├── schema.sql
-    └── seeds.sql
-```
-
----
 
 ## API Endpoints
 
