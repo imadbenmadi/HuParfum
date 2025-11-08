@@ -20,12 +20,10 @@ const User = sequelize.define(
         phone: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
         },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
             validate: { isEmail: true },
         },
         password: {
@@ -43,8 +41,6 @@ const User = sequelize.define(
         telegram_chat_id: {
             type: DataTypes.STRING,
             allowNull: true,
-            unique: true,
-            sparse: true,
         },
         created_at: {
             type: DataTypes.DATE,

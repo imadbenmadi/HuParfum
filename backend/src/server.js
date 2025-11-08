@@ -26,6 +26,9 @@ const settingsRoutes = require("./routes/settings");
 // Import middleware
 const { limiter } = require("./middlewares/rateLimiter");
 
+// Import Swagger
+const { specs, swaggerUi } = require("./config/swagger");
+
 // Initialize Express app
 const app = express();
 
@@ -34,6 +37,9 @@ app.use(helmet()); // Security headers
 app.use(cors()); // CORS
 app.use(express.json()); // Parse JSON
 app.use(limiter); // Rate limiting
+
+// Swagger UI Documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Routes
 // Public settings endpoints (MUST be before admin routes to work properly)
@@ -83,7 +89,7 @@ app.use((err, req, res, next) => {
 async function startServer() {
     try {
         // Sync database
-        await sequelize.sync({ alter: true });
+        await sequelize.sync({ alter: false, force: false });
         console.log("[OK] Database synchronized");
 
         // Initialize feature flags
@@ -95,6 +101,11 @@ async function startServer() {
         const settingsManager = require("./utils/settingsManager");
         await settingsManager.initializeDefaultSettings();
         console.log("[OK] Website settings initialized");
+
+        // Seed database with default data
+        const databaseSeeder = require("./utils/databaseSeeder");
+        await databaseSeeder.seedDatabase();
+        console.log("[OK] Database seeding completed");
 
         // Start listening
         const PORT = process.env.PORT || 5000;

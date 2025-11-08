@@ -10,12 +10,14 @@ import {
     FiLogOut,
     FiToggle2,
     FiSettings,
+    FiCode,
 } from "react-icons/fi";
 import AdminStatsPage from "./AdminStatsPage";
 import AdminOrdersPage from "./AdminOrdersPage";
 import AdminProductsPage from "./AdminProductsPage";
 import AdminFeaturesPage from "./AdminFeaturesPage";
 import AdminSettingsPage from "./AdminSettingsPage";
+import APIExplorer from "./APIExplorer";
 
 function AdminDashboard({ admin, adminToken, onLogout }) {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -83,6 +85,11 @@ function AdminDashboard({ admin, adminToken, onLogout }) {
                                 label: "الإعدادات",
                                 icon: FiSettings,
                             },
+                            {
+                                key: "api",
+                                label: "API Explorer",
+                                icon: FiCode,
+                            },
                         ].map((tab) => {
                             const IconComponent = tab.icon;
                             return (
@@ -120,6 +127,7 @@ function AdminDashboard({ admin, adminToken, onLogout }) {
                     {activeTab === "settings" && (
                         <AdminSettingsPage adminToken={adminToken} />
                     )}
+                    {activeTab === "api" && <APIExplorer />}
                 </div>
             </div>
         </div>

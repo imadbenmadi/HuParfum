@@ -21,6 +21,8 @@ import MyOrdersPage from "./pages/MyOrdersPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
+import APITester from "./pages/APITester";
+import TestingHub from "./pages/TestingHub";
 
 // Components
 import { ToastContainer } from "./components/Toast";
@@ -171,6 +173,10 @@ function App() {
                         )
                     }
                 />
+
+                {/* API Testing Routes */}
+                <Route path="/api-tester" element={<APITester />} />
+                <Route path="/testing" element={<TestingHub />} />
 
                 {/* Fallback */}
                 <Route path="*" element={<Navigate to="/" />} />

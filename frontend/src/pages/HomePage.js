@@ -94,6 +94,13 @@ function HomePage() {
                                 المتجر
                             </Link>
                             <Link
+                                to="/testing"
+                                className="text-candle-white uppercase text-sm font-medium hover:text-candle-yellow transition-colors"
+                                title="API Testing Hub"
+                            >
+                                🧪 اختبار
+                            </Link>
+                            <Link
                                 to="/login"
                                 className="text-candle-white uppercase text-sm font-medium hover:text-candle-yellow transition-colors"
                             >
