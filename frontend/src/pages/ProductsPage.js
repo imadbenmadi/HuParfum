@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import "./ProductsPage.css";
 
 function ProductsPage() {
     const [products, setProducts] = useState([]);
@@ -84,56 +83,90 @@ function ProductsPage() {
     };
 
     if (loading) {
-        return <div className="loading">جاري تحميل المتجر...</div>;
+        return (
+            <div className="flex items-center justify-center min-h-screen text-xl font-semibold text-candle-yellow">
+                جاري تحميل المتجر...
+            </div>
+        );
     }
 
     return (
-        <div className="products-page">
+        <div className="min-h-screen bg-dark-bg">
             {/* Header */}
-            <header className="header">
+            <header className="sticky top-0 z-50 bg-dark-bg/98 backdrop-blur-md border-b-2 border-candle-yellow/20 shadow-lg">
                 <div className="container">
-                    <div className="header-content">
-                        <Link to="/" className="logo">
-                            <h1>🎁 HuParfum</h1>
+                    <div className="flex justify-between items-center py-4">
+                        <Link to="/" className="no-underline">
+                            <h1 className="text-3xl font-bold bg-gradient-to-r from-candle-yellow to-bright-yellow bg-clip-text text-transparent">
+                                🎁 HuParfum
+                            </h1>
                         </Link>
-                        <nav className="nav">
-                            <Link to="/">الرئيسية</Link>
-                            <Link to="/products">المتجر</Link>
-                            <Link to="/cart">السلة ({cart.length})</Link>
-                            <Link to="/login">دخول</Link>
+                        <nav className="flex gap-8">
+                            <Link
+                                to="/"
+                                className="text-candle-white hover:text-bright-yellow transition-colors"
+                            >
+                                الرئيسية
+                            </Link>
+                            <Link
+                                to="/products"
+                                className="text-bright-yellow font-semibold"
+                            >
+                                المتجر
+                            </Link>
+                            <Link
+                                to="/cart"
+                                className="text-candle-white hover:text-bright-yellow transition-colors"
+                            >
+                                السلة ({cart.length})
+                            </Link>
+                            <Link
+                                to="/login"
+                                className="text-candle-white hover:text-bright-yellow transition-colors"
+                            >
+                                دخول
+                            </Link>
                         </nav>
                     </div>
                 </div>
             </header>
 
             {/* Products Section */}
-            <section className="products-section">
+            <section className="py-12 md:py-16">
                 <div className="container">
-                    <h1>🌹 متجرنا</h1>
-                    <p className="subtitle">
-                        اختار من بين أجود الريحات الفاخرة
+                    <h1 className="text-5xl font-bold text-candle-white mb-4">
+                        🌹 متجرنا
+                    </h1>
+                    <p className="text-xl text-text-muted mb-12">
+                        اختار من بين أجود الريحات الفاخرة والشموع العطرية
                     </p>
 
-                    <div className="products-grid">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {products.map((product) => (
-                            <div key={product.id} className="product-card">
-                                <div className="product-image">
+                            <div key={product.id} className="card group">
+                                <div className="text-6xl text-center py-8 bg-gradient-to-br from-candle-yellow/20 to-bright-yellow/20">
                                     {product.image_url}
                                 </div>
-                                <h3>{product.name}</h3>
-                                <p className="description">
-                                    {product.description}
-                                </p>
-                                <div className="product-footer">
-                                    <span className="price">
-                                        {product.price} دج
-                                    </span>
-                                    <button
-                                        className="btn btn-primary"
-                                        onClick={() => handleAddToCart(product)}
-                                    >
-                                        زيد للسلة
-                                    </button>
+                                <div className="p-6">
+                                    <h3 className="text-xl font-semibold text-candle-white mb-2">
+                                        {product.name}
+                                    </h3>
+                                    <p className="text-text-muted text-sm mb-4 line-clamp-2">
+                                        {product.description}
+                                    </p>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-bright-yellow font-bold text-lg">
+                                            {product.price} دج
+                                        </span>
+                                        <button
+                                            className="btn-primary py-2 px-4"
+                                            onClick={() =>
+                                                handleAddToCart(product)
+                                            }
+                                        >
+                                            زيد للسلة
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}

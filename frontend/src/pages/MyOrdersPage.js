@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./MyOrdersPage.css";
 
 function MyOrdersPage({ token, user, onLogout }) {
     const [orders, setOrders] = useState([]);
@@ -18,7 +17,7 @@ function MyOrdersPage({ token, user, onLogout }) {
     const fetchOrders = async () => {
         try {
             const res = await axios.get(
-                "http://localhost:5000/api/orders/my-orders",
+                "http://localhost:5001/api/orders/my-orders",
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
@@ -37,7 +36,7 @@ function MyOrdersPage({ token, user, onLogout }) {
     const handleLinkTelegram = async (orderId) => {
         try {
             const res = await axios.post(
-                "http://localhost:5000/api/telegram/generate-link",
+                "http://localhost:5001/api/telegram/generate-link",
                 {
                     user_id: user.id,
                     order_id: orderId,
@@ -56,22 +55,26 @@ function MyOrdersPage({ token, user, onLogout }) {
     const statusLabels = {
         requested: { ar: "جديد", icon: "🆕" },
         under_discussion: { ar: "قيد المناقشة", icon: "💬" },
-        payed: { ar: "تمّ الدفع", icon: "✅" },
+        payed: { ar: "تمّ الدفع", icon: "" },
         delivering: { ar: "جاري التوصيل", icon: "🚚" },
         delivered_successfully: { ar: "توصّل بنجاح", icon: "🎁" },
     };
 
     return (
-        <div className="my-orders-page">
+        <div className="min-h-screen bg-dark-bg">
             {/* Header */}
-            <header className="header">
+            <header className="sticky top-0 z-50 bg-dark-bg/98 backdrop-blur-md border-b-2 border-candle-yellow/20 shadow-lg">
                 <div className="container">
-                    <div className="header-content">
-                        <h1>🎁 HuParfum - طلبياتي</h1>
-                        <div className="user-menu">
-                            <span>مرحبا {user?.name} 👋</span>
+                    <div className="flex justify-between items-center py-4">
+                        <h1 className="text-3xl font-bold bg-gradient-to-r from-candle-yellow to-bright-yellow bg-clip-text text-transparent">
+                            🎁 HuParfum - طلبياتي
+                        </h1>
+                        <div className="flex items-center gap-6">
+                            <span className="text-candle-white">
+                                مرحبا {user?.name} 👋
+                            </span>
                             <button
-                                className="btn btn-secondary"
+                                className="btn-secondary"
                                 onClick={onLogout}
                             >
                                 خروج
@@ -82,102 +85,109 @@ function MyOrdersPage({ token, user, onLogout }) {
             </header>
 
             {/* Main Content */}
-            <section className="orders-section">
+            <section className="py-12 md:py-16">
                 <div className="container">
                     {loading ? (
-                        <div className="loading">جاري تحميل الطلبيات...</div>
+                        <div className="flex items-center justify-center min-h-[60vh] text-xl font-semibold text-candle-yellow">
+                            جاري تحميل الطلبيات...
+                        </div>
                     ) : orders.length === 0 ? (
-                        <div className="empty-state">
-                            <div className="empty-icon">🛍️</div>
-                            <h2>ما عندك حتى طلبية هسع</h2>
-                            <p>ابدا توضع طلبيات من عندنا الآن!</p>
+                        <div className="text-center py-20 bg-card-bg border border-border-color rounded-xl">
+                            <div className="text-6xl mb-6">🛍️</div>
+                            <h2 className="text-2xl font-bold text-candle-white mb-3">
+                                ما عندك حتى طلبية هسع
+                            </h2>
+                            <p className="text-text-muted mb-8">
+                                ابدا توضع طلبيات من عندنا الآن!
+                            </p>
                             <button
-                                className="btn btn-primary"
+                                className="btn-primary"
                                 onClick={() => navigate("/products")}
                             >
                                 اروح للمتجر
                             </button>
                         </div>
                     ) : (
-                        <>
-                            <h2>طلبياتي ({orders.length})</h2>
-                            <div className="orders-list">
+                        <div>
+                            <h2 className="text-3xl font-bold text-candle-white mb-8">
+                                طلبياتي ({orders.length})
+                            </h2>
+                            <div className="space-y-6">
                                 {orders.map((order) => (
-                                    <div key={order.id} className="order-card">
-                                        <div className="order-header">
-                                            <div className="order-id">
-                                                <span className="order-number">
+                                    <div
+                                        key={order.id}
+                                        className="bg-card-bg border border-border-color rounded-xl overflow-hidden hover:shadow-lg transition-all"
+                                    >
+                                        {/* Order Header */}
+                                        <div className="p-6 border-b border-border-color flex justify-between items-start">
+                                            <div>
+                                                <p className="text-text-muted text-sm mb-1">
                                                     الطلب #{order.id}
-                                                </span>
-                                                <span className="order-date">
+                                                </p>
+                                                <p className="text-candle-white text-sm">
                                                     {new Date(
                                                         order.created_at
                                                     ).toLocaleDateString(
                                                         "ar-DZ"
                                                     )}
-                                                </span>
+                                                </p>
                                             </div>
-                                            <div className="order-status">
-                                                <span
-                                                    className={`status-badge status-${order.status}`}
-                                                >
-                                                    {
-                                                        statusLabels[
-                                                            order.status
-                                                        ]?.icon
-                                                    }{" "}
-                                                    {
-                                                        statusLabels[
-                                                            order.status
-                                                        ]?.ar
-                                                    }
-                                                </span>
-                                            </div>
+                                            <span
+                                                className={`status-${order.status} inline-block px-4 py-2 rounded-full text-sm font-semibold`}
+                                            >
+                                                {
+                                                    statusLabels[order.status]
+                                                        ?.icon
+                                                }{" "}
+                                                {statusLabels[order.status]?.ar}
+                                            </span>
                                         </div>
 
-                                        <div className="order-details">
-                                            <div className="detail-item">
-                                                <span className="label">
-                                                    المنتوج:
-                                                </span>
-                                                <span className="value">
+                                        {/* Order Details */}
+                                        <div className="p-6 border-b border-border-color grid grid-cols-2 md:grid-cols-4 gap-4">
+                                            <div>
+                                                <label className="text-text-muted text-sm block mb-1">
+                                                    المنتوج
+                                                </label>
+                                                <p className="text-candle-white font-semibold">
                                                     {order.product?.name}
-                                                </span>
+                                                </p>
                                             </div>
-                                            <div className="detail-item">
-                                                <span className="label">
-                                                    الكمية:
-                                                </span>
-                                                <span className="value">
+                                            <div>
+                                                <label className="text-text-muted text-sm block mb-1">
+                                                    الكمية
+                                                </label>
+                                                <p className="text-candle-white font-semibold">
                                                     {order.quantity}
-                                                </span>
+                                                </p>
                                             </div>
-                                            <div className="detail-item">
-                                                <span className="label">
-                                                    السعر:
-                                                </span>
-                                                <span className="value">
+                                            <div>
+                                                <label className="text-text-muted text-sm block mb-1">
+                                                    السعر
+                                                </label>
+                                                <p className="text-bright-yellow font-bold">
                                                     {order.product?.price *
                                                         order.quantity}{" "}
                                                     دج
-                                                </span>
+                                                </p>
                                             </div>
                                             {order.delivery_agency && (
-                                                <div className="detail-item">
-                                                    <span className="label">
-                                                        وكالة التوصيل:
-                                                    </span>
-                                                    <span className="value">
+                                                <div>
+                                                    <label className="text-text-muted text-sm block mb-1">
+                                                        وكالة التوصيل
+                                                    </label>
+                                                    <p className="text-candle-white font-semibold">
                                                         {order.delivery_agency}
-                                                    </span>
+                                                    </p>
                                                 </div>
                                             )}
                                         </div>
 
-                                        <div className="order-actions">
+                                        {/* Order Actions */}
+                                        <div className="p-6 flex gap-3">
                                             {!order.telegram_linked ? (
                                                 <button
-                                                    className="btn btn-primary"
+                                                    className="btn-primary flex-1"
                                                     onClick={() =>
                                                         handleLinkTelegram(
                                                             order.id
@@ -189,10 +199,10 @@ function MyOrdersPage({ token, user, onLogout }) {
                                                 </button>
                                             ) : (
                                                 <button
-                                                    className="btn btn-success"
+                                                    className="flex-1 px-6 py-3 bg-green-500/20 text-green-300 border border-green-500/50 rounded-md font-semibold cursor-not-allowed"
                                                     disabled
                                                 >
-                                                    ✅ راك مربوط مع البوت
+                                                    ✓ راك مربوط مع البوت
                                                 </button>
                                             )}
 
@@ -200,7 +210,7 @@ function MyOrdersPage({ token, user, onLogout }) {
                                                 href="https://t.me/houda"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="btn btn-secondary"
+                                                className="btn-secondary"
                                             >
                                                 💬 تواصل مع هدى
                                             </a>
@@ -208,7 +218,7 @@ function MyOrdersPage({ token, user, onLogout }) {
                                     </div>
                                 ))}
                             </div>
-                        </>
+                        </div>
                     )}
                 </div>
             </section>

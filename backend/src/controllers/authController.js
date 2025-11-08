@@ -8,6 +8,11 @@ const {
     verifyToken,
 } = require("../utils/jwt");
 const { sendVerificationEmail } = require("../notifications/emailService");
+const {
+    validateRegistration,
+    validateLogin,
+    formatAlgerianPhone,
+} = require("../utils/validation");
 require("dotenv").config();
 
 // Register user
@@ -23,17 +28,30 @@ exports.register = async (req, res) => {
             });
         }
 
-        if (password !== passwordConfirm) {
+        // Validate all fields
+        const validation = validateRegistration({
+            name,
+            phone,
+            email,
+            password,
+            passwordConfirm,
+        });
+
+        if (!validation.valid) {
             return res.status(400).json({
                 success: false,
-                message: "الكلمات السرية ما تتطابقش",
+                message: "البيانات المدخلة غير صحيحة",
+                errors: validation.errors,
             });
         }
+
+        // Format phone number to +213 format
+        const formattedPhone = formatAlgerianPhone(phone);
 
         // Check if user already exists
         const existingUser = await User.findOne({
             where: {
-                email: email.toLowerCase(),
+                email: email.toLowerCase().trim(),
             },
         });
 
@@ -46,7 +64,7 @@ exports.register = async (req, res) => {
 
         const existingPhone = await User.findOne({
             where: {
-                phone: phone,
+                phone: formattedPhone,
             },
         });
 
@@ -59,9 +77,9 @@ exports.register = async (req, res) => {
 
         // Create user
         const user = await User.create({
-            name,
-            phone,
-            email: email.toLowerCase(),
+            name: name.trim(),
+            phone: formattedPhone,
+            email: email.toLowerCase().trim(),
             password,
             email_verified: false,
         });
@@ -157,16 +175,20 @@ exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        if (!email || !password) {
+        // Validate login fields
+        const validation = validateLogin({ email, password });
+
+        if (!validation.valid) {
             return res.status(400).json({
                 success: false,
-                message: "الإيميل والكلمة السرية مطلوبة",
+                message: "البيانات المدخلة غير صحيحة",
+                errors: validation.errors,
             });
         }
 
         const user = await User.findOne({
             where: {
-                email: email.toLowerCase(),
+                email: email.toLowerCase().trim(),
             },
         });
 
@@ -251,6 +273,107 @@ exports.getProfile = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "خطأ في جلب البروفايل",
+            error: err.message,
+        });
+    }
+};
+
+// Update user profile
+exports.updateProfile = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { name, phone, telegram_username } = req.body;
+
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "المستخدم مالقاعش",
+            });
+        }
+
+        // Update profile
+        if (name) user.name = name;
+        if (phone) user.phone = phone;
+        if (telegram_username) user.telegram_username = telegram_username;
+
+        await user.save();
+
+        res.json({
+            success: true,
+            message: "تم تحديث البروفايل بنجاح",
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                email_verified: user.email_verified,
+                telegram_linked: !!user.telegram_chat_id,
+                telegram_username: user.telegram_username,
+            },
+        });
+    } catch (err) {
+        console.error("Update profile error:", err);
+        res.status(500).json({
+            success: false,
+            message: "خطأ في تحديث البروفايل",
+            error: err.message,
+        });
+    }
+};
+
+// Resend verification email
+exports.resendVerificationEmail = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        // Validate email
+        if (!email || typeof email !== "string") {
+            return res.status(400).json({
+                success: false,
+                message: "الإيميل مطلوب",
+            });
+        }
+
+        const trimmedEmail = email.toLowerCase().trim();
+
+        const user = await User.findOne({
+            where: {
+                email: trimmedEmail,
+            },
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "المستخدم مالقاعش",
+            });
+        }
+
+        if (user.email_verified) {
+            return res.status(400).json({
+                success: false,
+                message: "البريد الإلكتروني أكّد بالفعل",
+            });
+        }
+
+        // Generate new verification token and link
+        const verificationToken = generateVerificationToken(user.email);
+        const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+
+        // Send verification email
+        await sendVerificationEmail(user.email, user.name, verificationLink);
+
+        res.json({
+            success: true,
+            message: "تمّ إرسال رسالة التأكيد مرة أخرى. شوف بريدك",
+        });
+    } catch (err) {
+        console.error("Resend verification email error:", err);
+        res.status(500).json({
+            success: false,
+            message: "خطأ في إرسال البريد الإلكتروني",
             error: err.message,
         });
     }

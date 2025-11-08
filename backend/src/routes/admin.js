@@ -13,6 +13,7 @@ router.post("/login", limiter, adminController.adminLogin);
 // Protected routes (admin must be logged in)
 router.get("/dashboard/stats", protectAdmin, adminController.getDashboardStats);
 router.get("/orders", protectAdmin, adminController.getAllOrders);
+router.get("/products", protectAdmin, adminController.getAllProducts);
 router.put(
     "/orders/:orderId/status",
     protectAdmin,

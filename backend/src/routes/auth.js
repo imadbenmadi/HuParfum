@@ -10,9 +10,15 @@ const { authLimiter } = require("../middlewares/rateLimiter");
 // Public routes
 router.post("/register", authLimiter, authController.register);
 router.post("/verify-email", authLimiter, authController.verifyEmail);
+router.post(
+    "/resend-verification-email",
+    authLimiter,
+    authController.resendVerificationEmail
+);
 router.post("/login", authLimiter, authController.login);
 
 // Protected routes
 router.get("/profile", protectUser, authController.getProfile);
+router.put("/profile", protectUser, authController.updateProfile);
 
 module.exports = router;

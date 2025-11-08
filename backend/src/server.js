@@ -12,12 +12,14 @@ const User = require("./models/User");
 const Product = require("./models/Product");
 const Order = require("./models/Order");
 const Admin = require("./models/Admin");
+const FeatureFlag = require("./models/FeatureFlag");
 
 // Import routes
 const authRoutes = require("./routes/auth");
 const orderRoutes = require("./routes/orders");
 const adminRoutes = require("./routes/admin");
 const telegramRoutes = require("./routes/telegram");
+const featuresRoutes = require("./routes/features");
 
 // Import middleware
 const { limiter } = require("./middlewares/rateLimiter");
@@ -35,6 +37,7 @@ app.use(limiter); // Rate limiting
 app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/admin/features", featuresRoutes);
 app.use("/api/telegram", telegramRoutes);
 
 // Health check endpoint
@@ -70,6 +73,11 @@ async function startServer() {
         // Sync database
         await sequelize.sync({ alter: true });
         console.log("[OK] Database synchronized");
+
+        // Initialize feature flags
+        const featureFlags = require("./utils/featureFlags");
+        await featureFlags.initializeDefaultFeatures();
+        console.log("[OK] Feature flags initialized");
 
         // Start listening
         const PORT = process.env.PORT || 5000;

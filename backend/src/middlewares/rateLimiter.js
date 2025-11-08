@@ -1,7 +1,7 @@
 // Rate limiting middleware
 // Prevents abuse of API endpoints
 
-const rateLimit = require("express-ratelimit");
+const rateLimit = require("express-rate-limit");
 
 // General rate limiter
 const limiter = rateLimit({

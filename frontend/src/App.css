@@ -1,171 +1,305 @@
-/* Global CSS for HuParfum Frontend */
+/* ========================================
+   HuParfum - App Component Styles
+   Tailwind CSS is now primary styling system
+   ======================================== */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* Root CSS variables for Tailwind */
 :root {
-    --primary-color: #d4af37; /* Gold */
-    --primary-dark: #a68c2e;
-    --text-color: #333;
-    --text-light: #666;
-    --background: #f9f9f9;
-    --border-color: #e0e0e0;
-    --success: #28a745;
-    --danger: #dc3545;
-    --warning: #ffc107;
-    --info: #17a2b8;
+    --primary-gold: #d4af37;
+    --secondary-gold: #c9a027;
+    --candle-white: #f5f5f0;
+    --candle-yellow: #ffd700;
+    --bright-yellow: #ffeb3b;
+    --dark-bg: #0a0a0a;
+    --darker-bg: #000000;
+    --card-bg: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-muted: #808080;
+    --accent-red: #e63946;
+    --success-green: #2ecc71;
+    --border-color: #333333;
+    --border-light: #444444;
 }
-
-html {
-    direction: rtl;
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    color: var(--text-color);
-    background-color: var(--background);
-    line-height: 1.6;
-}
-
-h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: -0.5px;
     margin-bottom: 1rem;
 }
 
-button,
-input,
-select,
-textarea {
-    font-family: inherit;
-    direction: inherit;
+h1 {
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, var(--primary-gold) 0%, #f0d77d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-button {
+h2 {
+    font-size: 2.5rem;
+    color: var(--primary-gold);
+}
+
+h3 {
+    font-size: 1.8rem;
+}
+
+p {
+    color: var(--text-secondary);
+}
+
+/* ========== Buttons ========== */
+
+button,
+input[type="button"],
+input[type="submit"] {
+    font-family: inherit;
+    direction: inherit;
     cursor: pointer;
     border: none;
-    padding: 0.75rem 1.5rem;
+    transition: var(--transition);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     border-radius: 5px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
 }
 
 button.btn-primary {
-    background-color: var(--primary-color);
-    color: white;
+    background: linear-gradient(
+        135deg,
+        var(--candle-yellow) 0%,
+        var(--bright-yellow) 100%
+    );
+    color: var(--darker-bg);
+    padding: 13px 32px;
+    font-size: 0.95rem;
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+    border: 1px solid transparent;
 }
 
 button.btn-primary:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+    box-shadow: 0 15px 45px rgba(255, 215, 0, 0.6);
+}
+
+button.btn-primary:active {
+    transform: translateY(-1px);
 }
 
 button.btn-secondary {
-    background-color: #6c757d;
-    color: white;
+    background: transparent;
+    color: var(--candle-white);
+    border: 2px solid var(--candle-white);
+    padding: 11px 30px;
+    font-size: 0.95rem;
 }
 
 button.btn-secondary:hover {
-    background-color: #5a6268;
+    background: var(--candle-white);
+    color: var(--darker-bg);
 }
 
+button.btn-small {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+}
+
+button.btn-danger {
+    background: var(--accent-red);
+    color: white;
+    padding: 10px 20px;
+}
+
+button.btn-danger:hover {
+    background: #d62834;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ========== Forms ========== */
+
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-.loading {
-    text-align: center;
-    padding: 2rem;
-    font-size: 1.2rem;
-    color: var(--text-light);
+.form-group {
+    margin-bottom: 20px;
 }
 
-.card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.alert {
-    padding: 1rem;
-    border-radius: 5px;
-    margin-bottom: 1.5rem;
-}
-
-.alert.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.alert.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.alert.alert-info {
-    background-color: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
 }
 
 input,
 textarea,
 select {
     width: 100%;
-    padding: 0.75rem;
+    padding: 12px 15px;
     border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-primary);
     border-radius: 5px;
-    margin-bottom: 1rem;
+    font-size: 1rem;
+    transition: var(--transition);
+    font-family: inherit;
+    direction: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-muted);
 }
 
 input:focus,
 textarea:focus,
 select:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    border-color: var(--primary-gold);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
 }
 
-.form-group {
-    margin-bottom: 1.5rem;
+/* ========== Alerts ========== */
+
+.loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-size: 1.5rem;
+    color: var(--primary-gold);
 }
 
-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
+.card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
 }
 
-/* Responsive Design */
+.card:hover {
+    border-color: var(--primary-gold);
+    box-shadow: var(--shadow-lg);
+}
+
+.alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    animation: slideIn 0.3s ease;
+    border-left: 4px solid;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.alert.alert-success {
+    background: rgba(46, 204, 113, 0.1);
+    border-color: var(--success-green);
+    color: var(--success-green);
+}
+
+.alert.alert-danger {
+    background: rgba(230, 57, 70, 0.1);
+    border-color: var(--accent-red);
+    color: var(--accent-red);
+}
+
+.alert.alert-info {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--primary-gold);
+    color: var(--primary-gold);
+}
+
+/* ========== Animations ========== */
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ========== Responsive Design ========== */
+
+@media (max-width: 1024px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+    h2 {
+        font-size: 1.8rem;
+    }
+    h3 {
+        font-size: 1.4rem;
+    }
+}
+
 @media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
+    h3 {
+        font-size: 1.2rem;
+    }
+
     .container {
         padding: 0 15px;
     }
 
-    h1 {
-        font-size: 1.8rem;
+    button.btn-primary,
+    button.btn-secondary {
+        padding: 10px 20px;
+        font-size: 0.9rem;
     }
+}
 
-    h2 {
+@media (max-width: 480px) {
+    h1 {
         font-size: 1.5rem;
     }
+    h2 {
+        font-size: 1.2rem;
+    }
 
-    button {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
+    body {
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 0 10px;
     }
 }

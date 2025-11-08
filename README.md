@@ -7,9 +7,10 @@ A complete full-stack e-commerce system for selling Algerian perfumes online wit
 ## Quick Start
 
 ### Prerequisites
-- Node.js v18+
-- MySQL v5.7+
-- npm or yarn
+
+-   Node.js v18+
+-   MySQL v5.7+
+-   npm or yarn
 
 ### Installation
 
@@ -47,36 +48,39 @@ mysql -u huparfum -p huparfum_db < ../database/schema.sql
 
 ---
 
-
 ## API Endpoints
 
 ### Base URL: `http://localhost:5000/api`
 
 ### Auth
-- `POST /auth/register` - Create account
-- `POST /auth/verify-email` - Verify email with token
-- `POST /auth/login` - Login
-- `GET /auth/profile` - Get user profile (protected)
+
+-   `POST /auth/register` - Create account
+-   `POST /auth/verify-email` - Verify email with token
+-   `POST /auth/login` - Login
+-   `GET /auth/profile` - Get user profile (protected)
 
 ### Orders
-- `POST /orders/create` - Create new order (protected)
-- `GET /orders/my-orders` - Get user's orders (protected)
-- `GET /orders/:id` - Get order details (protected)
+
+-   `POST /orders/create` - Create new order (protected)
+-   `GET /orders/my-orders` - Get user's orders (protected)
+-   `GET /orders/:id` - Get order details (protected)
 
 ### Admin
-- `POST /admin/login` - Admin login
-- `GET /admin/stats` - Get dashboard stats (protected)
-- `GET /admin/orders` - Get all orders (protected)
-- `PUT /admin/orders/:id/status` - Update order status (protected)
+
+-   `POST /admin/login` - Admin login
+-   `GET /admin/stats` - Get dashboard stats (protected)
+-   `GET /admin/orders` - Get all orders (protected)
+-   `PUT /admin/orders/:id/status` - Update order status (protected)
 
 ### Order Statuses
-| Code | Status |
-|------|--------|
-| requested | New order |
-| under_discussion | In preparation |
-| payed | Payment received |
-| delivering | In transit |
-| delivered_successfully | Delivered |
+
+| Code                   | Status           |
+| ---------------------- | ---------------- |
+| requested              | New order        |
+| under_discussion       | In preparation   |
+| payed                  | Payment received |
+| delivering             | In transit       |
+| delivered_successfully | Delivered        |
 
 ---
 
@@ -93,7 +97,7 @@ DB_NAME=huparfum_db
 DB_PORT=3306
 
 # Server
-PORT=5000
+PORT=5001
 NODE_ENV=development
 
 # Security
@@ -121,68 +125,76 @@ FRONTEND_URL=http://localhost:3000
 ## Tech Stack
 
 **Backend:**
-- Node.js + Express.js
-- MySQL + Sequelize ORM
-- JWT Authentication
-- bcryptjs for password hashing
-- Nodemailer for emails
-- Telegram Bot API
+
+-   Node.js + Express.js
+-   MySQL + Sequelize ORM
+-   JWT Authentication
+-   bcryptjs for password hashing
+-   Nodemailer for emails
+-   Telegram Bot API
 
 **Frontend:**
-- React v18
-- React Router v6
-- CSS Grid/Flexbox (RTL)
-- localStorage for client-side storage
+
+-   React v18
+-   React Router v6
+-   CSS Grid/Flexbox (RTL)
+-   localStorage for client-side storage
 
 **Database:**
-- MySQL with 4 main tables (users, products, orders, admins)
-- 6 foreign key relationships
-- 7 performance indexes
+
+-   MySQL with 4 main tables (users, products, orders, admins)
+-   6 foreign key relationships
+-   7 performance indexes
 
 ---
 
 ## Security Features
 
-- Password hashing with bcryptjs (salt rounds: 10)
-- JWT tokens (7-day expiry)
-- AES-256-CBC encryption for Telegram links
-- Rate limiting on auth endpoints (5 req/15min)
-- General rate limiting (100 req/15min)
-- CORS enabled
-- HTTP security headers (Helmet)
+-   Password hashing with bcryptjs (salt rounds: 10)
+-   JWT tokens (7-day expiry)
+-   AES-256-CBC encryption for Telegram links
+-   Rate limiting on auth endpoints (5 req/15min)
+-   General rate limiting (100 req/15min)
+-   CORS enabled
+-   HTTP security headers (Helmet)
 
 ---
 
 ## Notifications
 
 ### Email Service
-- Email verification
-- Order confirmation
-- Payment confirmation
-- Delivery notifications
-- Delivery complete
+
+-   Email verification
+-   Order confirmation
+-   Payment confirmation
+-   Delivery notifications
+-   Delivery complete
 
 ### Telegram Bots
-- User bot: `/start` (link account), `/status` (check orders)
-- Admin bot: alerts for new orders, linking events, status changes
+
+-   User bot: `/start` (link account), `/status` (check orders)
+-   Admin bot: alerts for new orders, linking events, status changes
 
 ---
 
 ## Development Commands
 
 ### Backend
+
 ```bash
 npm start          # Start production server
 npm run dev        # Start with nodemon (watches for changes)
 ```
 
 ### Frontend
+
 ```bash
 npm start          # Start dev server (http://localhost:3000)
 npm run build      # Build for production
 ```
 
 ### Database
+
 ```bash
 mysql -u huparfum -p huparfum_db < schema.sql
 mysql -u huparfum -p huparfum_db < seeds.sql
@@ -193,6 +205,7 @@ mysql -u huparfum -p huparfum_db < seeds.sql
 ## Testing
 
 ### User Registration & Login
+
 ```bash
 POST /auth/register
 {
@@ -205,6 +218,7 @@ POST /auth/register
 ```
 
 ### Create Order
+
 ```bash
 POST /orders/create
 Authorization: Bearer <token>
@@ -217,6 +231,7 @@ Authorization: Bearer <token>
 ```
 
 ### Admin Login
+
 ```bash
 POST /admin/login
 {
@@ -230,6 +245,7 @@ POST /admin/login
 ## Common Issues
 
 ### Database Connection Error
+
 ```bash
 # Check MySQL is running
 mysql -u root -p
@@ -238,30 +254,34 @@ cat backend/.env
 ```
 
 ### Email Not Sending
-- Use Gmail app password (not main password)
-- Enable "Less secure app access" temporarily
-- Check console logs: `npm run dev`
+
+-   Use Gmail app password (not main password)
+-   Enable "Less secure app access" temporarily
+-   Check console logs: `npm run dev`
 
 ### Telegram Bot Not Working
-- Verify token in `.env`
-- Test bot directly on Telegram
-- Check internet connection
+
+-   Verify token in `.env`
+-   Test bot directly on Telegram
+-   Check internet connection
 
 ### CORS Error
-- Ensure FRONTEND_URL in backend/.env matches your frontend URL
-- Verify API_URL in frontend/src/config.js
+
+-   Ensure FRONTEND_URL in backend/.env matches your frontend URL
+-   Verify API_URL in frontend/src/config.js
 
 ---
 
 ## Production Deployment
 
 ### Prerequisites
-- Ubuntu 20.04+ VPS
-- 2GB RAM minimum
-- Node.js v18+
-- MySQL v5.7+
-- Nginx
-- SSL certificate
+
+-   Ubuntu 20.04+ VPS
+-   2GB RAM minimum
+-   Node.js v18+
+-   MySQL v5.7+
+-   Nginx
+-   SSL certificate
 
 ### Steps
 
@@ -306,16 +326,16 @@ sudo certbot certonly --nginx -d yourdomain.com
 server {
     listen 443 ssl http2;
     server_name yourdomain.com;
-    
+
     ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
-    
+
     location /api {
         proxy_pass http://localhost:5000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
-    
+
     location / {
         root /var/www/huparfum/frontend/build;
         try_files $uri $uri/ /index.html;
@@ -334,50 +354,54 @@ server {
 ## Database Schema
 
 **Users Table**
-- id, name, email, phone, password, verified, telegram_linked, telegram_username, created_at
+
+-   id, name, email, phone, password, verified, telegram_linked, telegram_username, created_at
 
 **Products Table**
-- id, name, description, price, image_url
+
+-   id, name, description, price, image_url
 
 **Orders Table**
-- id, order_number, user_id, status (enum), total_price, telegram_linked, created_at
+
+-   id, order_number, user_id, status (enum), total_price, telegram_linked, created_at
 
 **Admins Table**
-- id, name, email, password, role (super_admin, admin, moderator)
+
+-   id, name, email, password, role (super_admin, admin, moderator)
 
 ---
 
 ## File Sizes
 
-- Total files: 50+
-- Backend code: ~3000 lines
-- Frontend code: ~1500 lines
-- Documentation: complete
-- Database schema: included with sample data
+-   Total files: 50+
+-   Backend code: ~3000 lines
+-   Frontend code: ~1500 lines
+-   Documentation: complete
+-   Database schema: included with sample data
 
 ---
 
 ## Next Steps
 
-- [ ] Configure .env with your credentials
-- [ ] Setup database
-- [ ] Test backend endpoints with Postman
-- [ ] Test frontend UI
-- [ ] Configure Telegram bots
-- [ ] Setup email service
-- [ ] Deploy to production
+-   [ ] Configure .env with your credentials
+-   [ ] Setup database
+-   [ ] Test backend endpoints with Postman
+-   [ ] Test frontend UI
+-   [ ] Configure Telegram bots
+-   [ ] Setup email service
+-   [ ] Deploy to production
 
 ---
 
 ## Notes
 
-- Frontend is RTL (Right-to-Left) for Arabic text
-- All user-facing text is in Arabic Darja
-- System uses localStorage for cart persistence
-- JWT tokens expire after 7 days
-- Rate limiting prevents brute force attacks
-- All passwords are bcrypt hashed
-- All sensitive data is encrypted
+-   Frontend is RTL (Right-to-Left) for Arabic text
+-   All user-facing text is in Arabic Darja
+-   System uses localStorage for cart persistence
+-   JWT tokens expire after 7 days
+-   Rate limiting prevents brute force attacks
+-   All passwords are bcrypt hashed
+-   All sensitive data is encrypted
 
 ---
 

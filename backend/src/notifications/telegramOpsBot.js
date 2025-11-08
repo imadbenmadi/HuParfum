@@ -38,7 +38,7 @@ async function sendNewOrderAlert(
             text: message,
             parse_mode: "Markdown",
         });
-        console.log(`✅ New order alert sent to admin for order #${orderId}`);
+        console.log(` New order alert sent to admin for order #${orderId}`);
     } catch (err) {
         console.error(`❌ Failed to send new order alert:`, err.message);
     }
@@ -63,7 +63,7 @@ async function sendUserLinkingAlert(userId, userName, orderId, userChatId) {
             text: message,
             parse_mode: "Markdown",
         });
-        console.log(`✅ User linking alert sent to admin for user #${userId}`);
+        console.log(` User linking alert sent to admin for user #${userId}`);
     } catch (err) {
         console.error(`❌ Failed to send user linking alert:`, err.message);
     }
@@ -92,7 +92,7 @@ async function sendStatusChangeAlert(
 ➡️ *الحالة الجديدة:* ${statusMap[newStatus] || newStatus}
 
 ---
-تمّ إرسال إشعار للزبون تلقائياً ✅
+تمّ إرسال إشعار للزبون تلقائياً 
   `;
 
     try {
@@ -101,9 +101,7 @@ async function sendStatusChangeAlert(
             text: message,
             parse_mode: "Markdown",
         });
-        console.log(
-            `✅ Status change alert sent to admin for order #${orderId}`
-        );
+        console.log(` Status change alert sent to admin for order #${orderId}`);
     } catch (err) {
         console.error(`❌ Failed to send status change alert:`, err.message);
     }

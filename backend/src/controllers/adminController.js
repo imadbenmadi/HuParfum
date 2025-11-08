@@ -1,6 +1,7 @@
 // Admin controller
 // Handles admin operations: manage orders, products, and send notifications
 
+const jwt = require("jsonwebtoken");
 const Order = require("../models/Order");
 const User = require("../models/User");
 const Product = require("../models/Product");
@@ -46,9 +47,17 @@ exports.adminLogin = async (req, res) => {
             });
         }
 
+        // Generate JWT token
+        const token = jwt.sign(
+            { id: admin.id, email: admin.email, role: admin.role },
+            process.env.JWT_SECRET || "your-secret-key",
+            { expiresIn: "7d" }
+        );
+
         res.json({
             success: true,
             message: "تمّ الدخول بنجاح!",
+            token: token,
             admin: {
                 id: admin.id,
                 name: admin.name,
@@ -290,6 +299,36 @@ exports.getDashboardStats = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "خطأ في جلب الإحصائيات",
+            error: err.message,
+        });
+    }
+};
+
+// Get all products (admin)
+exports.getAllProducts = async (req, res) => {
+    try {
+        const products = await Product.findAll({
+            attributes: [
+                "id",
+                "name",
+                "description",
+                "category",
+                "price",
+                "stock",
+            ],
+            order: [["created_at", "DESC"]],
+        });
+
+        res.json({
+            success: true,
+            count: products.length,
+            products: products,
+        });
+    } catch (err) {
+        console.error("Get all products error:", err);
+        res.status(500).json({
+            success: false,
+            message: "خطأ في جلب المنتجات",
             error: err.message,
         });
     }

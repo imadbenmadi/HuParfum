@@ -18,7 +18,12 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
-import AdminDashboard from "./pages/AdminDashboard";
+import UserProfilePage from "./pages/UserProfilePage";
+import AdminLoginPage from "./pages/AdminLoginPage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
+
+// Components
+import { ToastContainer } from "./components/Toast";
 
 // CSS
 import "./App.css";
@@ -37,7 +42,7 @@ function App() {
         if (token) {
             // Verify token and fetch user profile
             axios
-                .get("http://localhost:5000/api/auth/profile", {
+                .get("http://localhost:5001/api/auth/profile", {
                     headers: { Authorization: `Bearer ${token}` },
                 })
                 .then((res) => {
@@ -84,6 +89,7 @@ function App() {
 
     return (
         <Router>
+            <ToastContainer />
             <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<HomePage />} />
@@ -122,13 +128,40 @@ function App() {
                         )
                     }
                 />
+                <Route
+                    path="/profile"
+                    element={
+                        token ? (
+                            <UserProfilePage
+                                token={token}
+                                user={user}
+                                onLogout={handleLogout}
+                            />
+                        ) : (
+                            <Navigate to="/login" />
+                        )
+                    }
+                />
 
                 {/* Admin Routes */}
                 <Route
-                    path="/admin"
+                    path="/admin/login"
                     element={
                         adminToken ? (
-                            <AdminDashboard
+                            <Navigate to="/admin/dashboard" />
+                        ) : (
+                            <AdminLoginPage
+                                setAdminToken={setAdminToken}
+                                setAdmin={setAdmin}
+                            />
+                        )
+                    }
+                />
+                <Route
+                    path="/admin/dashboard"
+                    element={
+                        adminToken ? (
+                            <AdminDashboardPage
                                 admin={admin}
                                 token={adminToken}
                                 onLogout={handleAdminLogout}

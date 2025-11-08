@@ -14,7 +14,7 @@ function getStatusMessageArabic(status) {
             "🆕 طلبياتك تسجّلت في النظام! في الانتظار شوي حتى نتكلم معاك.",
         under_discussion:
             "💬 هسع راك في النقاش معانا. غادي نخبّرك بأي خبر جديد.",
-        payed: "✅ الدفع تمّ بنجاح! الحمد لله غادي نبدا نتحضّر للتوصيل.",
+        payed: " الدفع تمّ بنجاح! الحمد لله غادي نبدا نتحضّر للتوصيل.",
         delivering: "🚚 الطلب خارج مع وكالة التوصيل! توصّلك قريب قريب.",
         delivered_successfully:
             "🎁 الحمد لله! الطلب توصّل بنجاح. نتمنى تكون راضي! شكراً على الثقة! 🙏",
@@ -46,7 +46,7 @@ async function sendStatusUpdateMessage(chatId, orderId, status, productName) {
             },
         });
         console.log(
-            `✅ Status update sent to chat ${chatId} for order #${orderId}`
+            ` Status update sent to chat ${chatId} for order #${orderId}`
         );
     } catch (err) {
         console.error(
@@ -59,7 +59,7 @@ async function sendStatusUpdateMessage(chatId, orderId, status, productName) {
 // Send initial linking confirmation
 async function sendLinkingConfirmation(chatId, userName) {
     const message = `
-✅ *تمّ الربط بنجاح!*
+ *تمّ الربط بنجاح!*
 
 سلام يا ${userName}! 👋
 
@@ -86,7 +86,7 @@ async function sendLinkingConfirmation(chatId, userName) {
                 ],
             },
         });
-        console.log(`✅ Linking confirmation sent to chat ${chatId}`);
+        console.log(` Linking confirmation sent to chat ${chatId}`);
     } catch (err) {
         console.error(
             `❌ Failed to send linking confirmation to chat ${chatId}:`,
@@ -108,7 +108,7 @@ async function sendOrdersStatus(chatId, orders) {
             const statusMap = {
                 requested: "جديد 🆕",
                 under_discussion: "قيد المناقشة 💬",
-                payed: "تمّ الدفع ✅",
+                payed: "تمّ الدفع ",
                 delivering: "جاري التوصيل 🚚",
                 delivered_successfully: "توصّل بنجاح 🎁",
             };
@@ -128,7 +128,7 @@ async function sendOrdersStatus(chatId, orders) {
             text: message,
             parse_mode: "Markdown",
         });
-        console.log(`✅ Orders status sent to chat ${chatId}`);
+        console.log(` Orders status sent to chat ${chatId}`);
     } catch (err) {
         console.error(
             `❌ Failed to send orders status to chat ${chatId}:`,
