@@ -9,11 +9,13 @@ import {
     FiShoppingCart,
     FiLogOut,
     FiToggle2,
+    FiSettings,
 } from "react-icons/fi";
 import AdminStatsPage from "./AdminStatsPage";
 import AdminOrdersPage from "./AdminOrdersPage";
 import AdminProductsPage from "./AdminProductsPage";
 import AdminFeaturesPage from "./AdminFeaturesPage";
+import AdminSettingsPage from "./AdminSettingsPage";
 
 function AdminDashboard({ admin, adminToken, onLogout }) {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -76,6 +78,11 @@ function AdminDashboard({ admin, adminToken, onLogout }) {
                                 label: "إدارة الميزات",
                                 icon: FiToggle2,
                             },
+                            {
+                                key: "settings",
+                                label: "الإعدادات",
+                                icon: FiSettings,
+                            },
                         ].map((tab) => {
                             const IconComponent = tab.icon;
                             return (
@@ -109,6 +116,9 @@ function AdminDashboard({ admin, adminToken, onLogout }) {
                     )}
                     {activeTab === "features" && (
                         <AdminFeaturesPage adminToken={adminToken} />
+                    )}
+                    {activeTab === "settings" && (
+                        <AdminSettingsPage adminToken={adminToken} />
                     )}
                 </div>
             </div>

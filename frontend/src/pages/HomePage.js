@@ -1,13 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import {
+    getHomepageSettings,
+    getSocialMediaSettings,
+    getContactSettings,
+    getBrandingSettings,
+} from "../utils/settingsManager";
 
 function HomePage() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [settings, setSettings] = useState({
+        homepage: {
+            hero_title: "أطيب الريحات والشموع الفاخرة الجزائرية",
+            hero_subtitle:
+                "اكتشف مجموعة عطورنا وشموعنا المختارة بعناية من أجود الروائح الجزائرية الأصلية",
+            tagline: "عطور وشموع فاخرة جزائرية 🕯️✨",
+        },
+        contact: {},
+        social: {},
+        branding: {},
+    });
 
     useEffect(() => {
         fetchFeaturedProducts();
+        fetchDynamicSettings();
     }, []);
 
     const fetchFeaturedProducts = async () => {
@@ -23,6 +41,31 @@ function HomePage() {
         }
     };
 
+    const fetchDynamicSettings = async () => {
+        try {
+            const [homepage, contact, social, branding] = await Promise.all([
+                getHomepageSettings(),
+                getContactSettings(),
+                getSocialMediaSettings(),
+                getBrandingSettings(),
+            ]);
+
+            setSettings({
+                homepage: homepage || {
+                    hero_title: "أطيب الريحات والشموع الفاخرة الجزائرية",
+                    hero_subtitle:
+                        "اكتشف مجموعة عطورنا وشموعنا المختارة بعناية من أجود الروائح الجزائرية الأصلية",
+                    tagline: "عطور وشموع فاخرة جزائرية 🕯️✨",
+                },
+                contact: contact || {},
+                social: social || {},
+                branding: branding || {},
+            });
+        } catch (err) {
+            console.log("Error fetching settings");
+        }
+    };
+
     return (
         <div className="min-h-screen bg-dark-bg text-text-primary">
             {/* Navigation Header */}
@@ -31,10 +74,10 @@ function HomePage() {
                     <div className="flex justify-between items-center py-4">
                         <div className="flex flex-col items-end">
                             <h2 className="text-2xl font-bold text-gradient">
-                                HuParfum
+                                {settings.branding.logo_text || "HuParfum"}
                             </h2>
                             <span className="text-candle-yellow text-xs uppercase tracking-wider font-semibold">
-                                عطور وشموع فاخرة جزائرية 🕯️✨
+                                {settings.homepage.tagline}
                             </span>
                         </div>
                         <nav className="flex gap-6 items-center">
@@ -73,11 +116,10 @@ function HomePage() {
                             حصري وفاخر
                         </div>
                         <h1 className="text-5xl md:text-6xl mb-6 text-candle-white text-shadow">
-                            أطيب الريحات والشموع الفاخرة الجزائرية
+                            {settings.homepage.hero_title}
                         </h1>
                         <p className="text-lg text-candle-white mb-10 text-shadow-sm leading-relaxed">
-                            اكتشف مجموعة عطورنا وشموعنا المختارة بعناية من أجود
-                            الروائح الجزائرية الأصلية
+                            {settings.homepage.hero_subtitle}
                         </p>
                         <div className="flex gap-6 justify-center flex-wrap">
                             <Link to="/products" className="btn-primary">
@@ -200,39 +242,101 @@ function HomePage() {
                 <div className="container">
                     <h2 className="text-center text-4xl mb-12">تواصل معنا</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="card bg-card-bg/80 border border-border-color p-6 text-center">
-                            <div className="text-3xl mb-3">📱</div>
-                            <h3 className="text-lg font-bold text-candle-white mb-2">
-                                الهاتف
-                            </h3>
-                            <p className="text-text-secondary">
-                                +213 XXX XXX XXX
-                            </p>
-                        </div>
-                        <div className="card bg-card-bg/80 border border-border-color p-6 text-center">
-                            <div className="text-3xl mb-3">📧</div>
-                            <h3 className="text-lg font-bold text-candle-white mb-2">
-                                الإيميل
-                            </h3>
-                            <p className="text-text-secondary">
-                                info@huparfum.com
-                            </p>
-                        </div>
-                        <div className="card bg-card-bg/80 border border-border-color p-6 text-center">
-                            <div className="text-3xl mb-3">💬</div>
-                            <h3 className="text-lg font-bold text-candle-white mb-2">
-                                تيليجرام
-                            </h3>
-                            <a
-                                href="https://t.me/houda"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-candle-yellow hover:text-bright-yellow font-semibold"
-                            >
-                                @houda
-                            </a>
-                        </div>
+                        {settings.contact?.phone && (
+                            <div className="card bg-card-bg/80 border border-border-color p-6 text-center">
+                                <div className="text-3xl mb-3">📱</div>
+                                <h3 className="text-lg font-bold text-candle-white mb-2">
+                                    الهاتف
+                                </h3>
+                                <a
+                                    href={`tel:${settings.contact.phone}`}
+                                    className="text-text-secondary hover:text-candle-yellow transition-colors"
+                                >
+                                    {settings.contact.phone}
+                                </a>
+                            </div>
+                        )}
+                        {settings.contact?.email && (
+                            <div className="card bg-card-bg/80 border border-border-color p-6 text-center">
+                                <div className="text-3xl mb-3">📧</div>
+                                <h3 className="text-lg font-bold text-candle-white mb-2">
+                                    الإيميل
+                                </h3>
+                                <a
+                                    href={`mailto:${settings.contact.email}`}
+                                    className="text-text-secondary hover:text-candle-yellow transition-colors"
+                                >
+                                    {settings.contact.email}
+                                </a>
+                            </div>
+                        )}
+                        {settings.social?.telegram?.personal_link && (
+                            <div className="card bg-card-bg/80 border border-border-color p-6 text-center">
+                                <div className="text-3xl mb-3">💬</div>
+                                <h3 className="text-lg font-bold text-candle-white mb-2">
+                                    تيليجرام
+                                </h3>
+                                <a
+                                    href={
+                                        settings.social.telegram.personal_link
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-candle-yellow hover:text-bright-yellow font-semibold transition-colors"
+                                >
+                                    {settings.social.telegram.personal_link.split(
+                                        "t.me/"
+                                    )[1] || "Message"}
+                                </a>
+                            </div>
+                        )}
                     </div>
+
+                    {/* Social Media Links */}
+                    {(settings.social?.instagram?.link ||
+                        settings.social?.facebook?.link ||
+                        settings.social?.whatsapp?.link) && (
+                        <div className="mt-16 text-center">
+                            <h3 className="text-2xl font-bold text-candle-white mb-6">
+                                تابعنا على وسائل التواصل
+                            </h3>
+                            <div className="flex justify-center gap-6 flex-wrap">
+                                {settings.social?.instagram?.link && (
+                                    <a
+                                        href={settings.social.instagram.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-12 h-12 bg-candle-yellow/20 hover:bg-candle-yellow/40 rounded-full flex items-center justify-center text-candle-yellow hover:text-bright-yellow transition-all text-xl"
+                                        title="Instagram"
+                                    >
+                                        📷
+                                    </a>
+                                )}
+                                {settings.social?.facebook?.link && (
+                                    <a
+                                        href={settings.social.facebook.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-12 h-12 bg-candle-yellow/20 hover:bg-candle-yellow/40 rounded-full flex items-center justify-center text-candle-yellow hover:text-bright-yellow transition-all text-xl"
+                                        title="Facebook"
+                                    >
+                                        f
+                                    </a>
+                                )}
+                                {settings.social?.whatsapp?.link && (
+                                    <a
+                                        href={settings.social.whatsapp.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-12 h-12 bg-candle-yellow/20 hover:bg-candle-yellow/40 rounded-full flex items-center justify-center text-candle-yellow hover:text-bright-yellow transition-all text-xl"
+                                        title="WhatsApp"
+                                    >
+                                        💬
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </section>
 

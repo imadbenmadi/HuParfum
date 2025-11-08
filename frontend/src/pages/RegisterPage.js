@@ -116,7 +116,7 @@ function RegisterPage() {
                         HuParfum
                     </h1>
                     <h2 className="text-2xl font-semibold text-candle-white text-center mb-8">
-                        اشتري حساب جديد
+                        إنشاء حساب جديد
                     </h2>
 
                     {error && (
@@ -264,7 +264,7 @@ function RegisterPage() {
                             className="btn-primary w-full"
                             disabled={loading}
                         >
-                            {loading ? "جاري التسجيل..." : "اشتري حساب"}
+                            {loading ? "جاري التسجيل..." : "إنشاء حساب"}
                         </button>
                     </form>
 
